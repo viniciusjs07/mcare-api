@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Schema   = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 let ServiceSchema = new Schema({
     name: {
@@ -12,10 +12,6 @@ let ServiceSchema = new Schema({
         required: true,
         unique: true,
         max: 100
-    },
-    price: {
-        type: Number,
-        required: true
     },
     professional: {
         type: mongoose.Types.ObjectId,

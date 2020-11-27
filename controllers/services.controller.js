@@ -255,8 +255,7 @@ exports.service_get_all = async (req, res, callback) => {
         result.push(
             {
                 identifier: services[i]['identifier'],
-                name: services[i]['name'], 
-                price: services[i]['price'], 
+                name: services[i]['name'],
                 professional: professional.name
             }
         );
@@ -308,7 +307,6 @@ exports.service_register = async (req, res, callback) => {
     const service = new Service({
         name: req.body.name,
         identifier: req.body.identifier,
-        price: req.body.price,
         other: req.body.other,
         professional: professional[0]._id
     });
