@@ -86,6 +86,59 @@ exports.scheduling_get_all = async (req, res, callback) => {
     return res.status(200).send({schedules});
 };
 
+exports.scheduling_get_all_count = async (req, res, callback) => {
+    const reqUser = await User.findById(req.userId);
+
+    if (!reqUser) {
+        return res.status(401).send({message: 'Desculpe, não conseguimos validar sua autenticação.'});
+    }
+
+    if (!req.params.professional_name) {
+        return res.status(400).send({message: 'Invalid professional name.'});
+    }
+
+    if (!req.query.initial_date.trim() || !req.query.final_date.trim()) {
+        return res.status(400).send({message: 'Invalid date.'});
+    }
+
+    let schedules_attended;
+    let schedules_not_attended;
+    const initialDate = req.query.initial_date;
+    const finalDate = req.query.final_date;
+
+    const professionalId = await Professional.find({name: req.params.professional_name}, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send({error: err.message});
+        }
+    });
+    schedules_attended = await Scheduling.count({
+        professional: professionalId,
+        status: 'Atendido',
+        date: {"$gte": initialDate, "$lt": finalDate}
+    }, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send({error: err.message});
+        }
+    }).populate('services');
+    schedules_not_attended = await Scheduling.count({
+        professional: professionalId,
+        status: 'Não Atendido',
+        date: {"$gte": initialDate, "$lt": finalDate}
+    }, (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(400).send({error: err.message});
+        }
+    }).populate('services');
+
+    return res.status(200).send({
+        attended: schedules_attended,
+        not_attended: schedules_not_attended
+    });
+};
+
 exports.service_scheduling_get_signals = async (req, res, callback) => {
     const schedule = await Scheduling.findById(req.params.id, (err) => {
         if (err) {
