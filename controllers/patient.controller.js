@@ -59,7 +59,8 @@ exports.patient_create = (req, res, callback) => {
         asthma: req.body.asthma,
         hyperthyroidism: req.body.hyperthyroidism,
         smoking: req.body.smoking,
-        alcoholism: req.body.alcoholism
+        alcoholism: req.body.alcoholism,
+        company: req.body.company,
     });
 
     if(req.body.userMedicine === 'Sim') {
