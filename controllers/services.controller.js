@@ -288,7 +288,7 @@ exports.service_get_all = async (req, res, callback) => {
         }
     });
 
-    result = []
+    result = [];
     for (let i = 0; i < services.length; i++) {
         const professional = await Professional.findById(services[i].professional, (err) => {
             if (err) {
