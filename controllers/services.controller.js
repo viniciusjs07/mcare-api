@@ -36,7 +36,7 @@ exports.scheduling_get_all = async (req, res, callback) => {
         }).populate('services');
     }
 
-    result = []
+    result = [];
     for (let i = 0; i < schedules.length; i++) {
 
         //Populate professional
@@ -77,7 +77,8 @@ exports.scheduling_get_all = async (req, res, callback) => {
                 _id: schedules[i]._id,
                 clinicalStory: schedules[i].clinicalStory,
                 priorityQueue: schedules[i].priorityQueue,
-                services: servicesNames
+                services: servicesNames,
+
             }
         );
     }
@@ -164,7 +165,6 @@ exports.service_scheduling = async (req, res, callback) => {
     if (professional === null || professional === undefined || professional.length < 1) {
         return res.status(404).send({message: 'Profissional não encontrado'});
     }
-
     const scheduling = new Scheduling({
         date: req.body.date,
         schedulingType: req.body.schedulingType,
@@ -172,8 +172,11 @@ exports.service_scheduling = async (req, res, callback) => {
         patient: patient[0]._id,
         professional: professional[0]._id,
         services: req.body.services,
-    });
+        cidName: req.body.cidName,
+        ubsName: req.body.ubsName,
+        schedulingTime: req.body.schedulingTime
 
+    });
     scheduling.save(
         (err) => {
             if (err) {
@@ -185,7 +188,7 @@ exports.service_scheduling = async (req, res, callback) => {
         }
     );
 
-}
+};
 
 exports.service_scheduling_delete = async (req, res, callback) => {
     Scheduling.findByIdAndRemove(req.params.id, (err) => {
@@ -198,7 +201,7 @@ exports.service_scheduling_delete = async (req, res, callback) => {
             res.status(200).send({message: 'Agendamento removido.'});
         }
     })
-}
+};
 
 exports.service_get_by_professional = async (req, res, callback) => {
     let professional = await Professional.find({name: req.params.professional_name},
@@ -222,7 +225,7 @@ exports.service_get_by_professional = async (req, res, callback) => {
     }).select('name identifier price _id');
 
     return res.status(200).send({services});
-}
+};
 
 exports.service_get_all = async (req, res, callback) => {
     let services = await Service.find({}, (err) => {

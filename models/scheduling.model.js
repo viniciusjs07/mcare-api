@@ -16,6 +16,19 @@ let SchedulingSchema = new Schema({
         ref: 'Professional',
         required: true
     },
+    cidName: {
+        type: String,
+        ref: 'CID'
+    },
+    ubsName: {
+        type: String,
+        ref: 'USB'
+    },
+    schedulingTime: {
+        type: String,
+        ref: 'Scheduling Time',
+        required: true
+    },
     services: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Service',
