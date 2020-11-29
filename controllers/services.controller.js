@@ -139,16 +139,16 @@ exports.scheduling_professional_name = async (req, res, callback) => {
     });
 };
 
-exports.schedule_get_by_cid = async(req, res, callback) => {
+exports.schedule_get_by_cid = async (req, res, callback) => {
     const schedules = await Scheduling.aggregate([
         {
             $group: {
                 _id: "$cidName",
-                total: { $sum: 1 }
+                total: {$sum: 1}
             }
         }
-    ] , (err) => {
-        if(err){
+    ], (err) => {
+        if (err) {
             console.error(err);
             return res.status(400).send({error: err.message});
         }
@@ -156,10 +156,15 @@ exports.schedule_get_by_cid = async(req, res, callback) => {
     const cids = [];
     const schedules_by_cid = [];
     for (let i = 0; i < schedules.length; i++) {
-        cids[i] = schedules[i]._id;
-        schedules_by_cid[i] = schedules[i].total;
+        if (schedules[i]._id !== null && schedules[i]._id !== '') {
+            cids[i] = schedules[i]._id;
+            schedules_by_cid[i] = schedules[i].total;
+        }
+
     }
-    return res.status(200).send({cids: cids, schedules_by_cid: schedules_by_cid});
+    var schedulesNotEmpty = schedules_by_cid.filter(item => item);
+    var cidsNotEmpty = cids.filter(item => item);
+    return res.status(200).send({cids: cidsNotEmpty, schedules_by_cid: schedulesNotEmpty});
 };
 
 exports.service_scheduling_get_signals = async (req, res, callback) => {
