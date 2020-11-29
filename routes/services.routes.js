@@ -15,5 +15,6 @@ router.post('/scheduling', login_controller.verifyAuth, services_controller.serv
 router.get('/scheduling/:id', login_controller.verifyAuth, services_controller.service_scheduling_details);
 router.delete('/scheduling/:id', login_controller.verifyEmployee, services_controller.service_scheduling_delete);
 router.get('/scheduling/signals/:id', login_controller.verifyAuth, services_controller.service_scheduling_get_signals);
+router.get('/scheduling_get_by_cid', login_controller.verifyAuth, services_controller.schedule_get_by_cid);
 
 module.exports = router;

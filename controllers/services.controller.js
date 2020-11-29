@@ -139,6 +139,29 @@ exports.scheduling_professional_name = async (req, res, callback) => {
     });
 };
 
+exports.schedule_get_by_cid = async(req, res, callback) => {
+    const schedules = await Scheduling.aggregate([
+        {
+            $group: {
+                _id: "$cidName",
+                total: { $sum: 1 }
+            }
+        }
+    ] , (err) => {
+        if(err){
+            console.error(err);
+            return res.status(400).send({error: err.message});
+        }
+    });
+    const cids = [];
+    const schedules_by_cid = [];
+    for (let i = 0; i < schedules.length; i++) {
+        cids[i] = schedules[i]._id;
+        schedules_by_cid[i] = schedules[i].total;
+    }
+    return res.status(200).send({cids: cids, schedules_by_cid: schedules_by_cid});
+};
+
 exports.service_scheduling_get_signals = async (req, res, callback) => {
     const schedule = await Scheduling.findById(req.params.id, (err) => {
         if (err) {
@@ -368,4 +391,5 @@ exports.service_register = async (req, res, callback) => {
             }
         }
     );
-}
+};
+
