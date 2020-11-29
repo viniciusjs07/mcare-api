@@ -86,7 +86,7 @@ exports.scheduling_get_all = async (req, res, callback) => {
     return res.status(200).send({schedules});
 };
 
-exports.scheduling_get_all_count = async (req, res, callback) => {
+exports.scheduling_professional_name = async (req, res, callback) => {
     const reqUser = await User.findById(req.userId);
 
     if (!reqUser) {
@@ -115,7 +115,7 @@ exports.scheduling_get_all_count = async (req, res, callback) => {
     schedules_attended = await Scheduling.count({
         professional: professionalId,
         status: 'Atendido',
-        date: {"$gte": initialDate, "$lt": finalDate}
+        date: {"$gte": initialDate, "$lte": finalDate}
     }, (err) => {
         if (err) {
             console.error(err);
@@ -125,7 +125,7 @@ exports.scheduling_get_all_count = async (req, res, callback) => {
     schedules_not_attended = await Scheduling.count({
         professional: professionalId,
         status: 'Não Atendido',
-        date: {"$gte": initialDate, "$lt": finalDate}
+        date: {"$gte": initialDate, "$lte": finalDate}
     }, (err) => {
         if (err) {
             console.error(err);
