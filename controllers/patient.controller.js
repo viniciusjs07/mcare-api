@@ -23,7 +23,7 @@ exports.patient_get_history = async(req, res, callback) => {
 
 
     return res.status(200).send({patientSchedules});
-}
+};
 
 exports.patient_get_all = async(req, res, callback) => {
   const patients = await Patient.find({}, (err) => {
@@ -36,6 +36,29 @@ exports.patient_get_all = async(req, res, callback) => {
   return res.status(200).send({patients});
 };
 
+exports.patient_get_by_company = async(req, res, callback) => {
+    const patients = await Patient.aggregate([
+        {
+            $group: {
+                _id: "$company",
+                total: { $sum: 1 }
+            }
+        }
+    ] , (err) => {
+        if(err){
+            console.error(err);
+            return res.status(400).send({error: err.message});
+        }
+    });
+
+    const companies = [];
+    const patients_by_companies = [];
+    for (let i = 0; i < patients.length; i++) {
+        companies[i] = patients[i]._id;
+        patients_by_companies[i] = patients[i].total;
+    }
+    return res.status(200).send({companies: companies, patients_by_companies: patients_by_companies});
+};
 
 exports.patient_create = (req, res, callback) => {
     let patient = new Patient({
@@ -59,7 +82,8 @@ exports.patient_create = (req, res, callback) => {
         asthma: req.body.asthma,
         hyperthyroidism: req.body.hyperthyroidism,
         smoking: req.body.smoking,
-        alcoholism: req.body.alcoholism
+        alcoholism: req.body.alcoholism,
+        company: req.body.company,
     });
 
     if(req.body.userMedicine === 'Sim') {

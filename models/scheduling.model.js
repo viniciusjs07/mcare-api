@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const Schema   = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 let SchedulingSchema = new Schema({
     date: {
         type: String,
-        required: true   
+        required: true
     },
     patient: {
         type: mongoose.Types.ObjectId,
@@ -16,41 +16,30 @@ let SchedulingSchema = new Schema({
         ref: 'Professional',
         required: true
     },
+    cidName: {
+        type: String,
+        ref: 'CID'
+    },
+    ubsName: {
+        type: String,
+        ref: 'USB'
+    },
+    schedulingTime: {
+        type: String,
+        ref: 'Scheduling Time',
+        required: true
+    },
     services: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Service',
         required: true
     }],
-    discount: {
-        type: Number,
-        require: true
-    },
     schedulingType: {
         type: String,
         required: true
     },
     other: {
         type: String
-    },
-    finalPrice: {
-        type: Number,
-        required: true
-    },
-    paymentMethdod: {
-        type: String,
-        required: true
-    },
-    payInCard: {
-        type: Number,
-        require: false
-    },
-    payInCash: {
-        type: Number,
-        required: false
-    },
-    paymentMade: {
-        type: String,
-        required: true
     },
     status: {
         type: String,

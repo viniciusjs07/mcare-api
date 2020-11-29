@@ -11,7 +11,6 @@ const professional = require('./routes/professiona.routes');
 const login        = require('./routes/login.routes');
 const employee     = require('./routes/employee.routes');
 const services     = require('./routes/services.routes');
-const plans        = require('./routes/health_plan.routes');
 const exams        = require('./routes/medical_exams.routes');
 const ProModel     = require('./models/professional.model');
 const app          = express();
@@ -32,7 +31,6 @@ app.use('/patients', patient);
 app.use('/professionals', professional);
 app.use('/employers', employee);
 app.use('/services', services);
-app.use('/plans', plans);
 app.use('/exams', exams);
 app.use('/mcare', login);
 

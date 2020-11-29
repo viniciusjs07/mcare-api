@@ -41,6 +41,11 @@ let PatientSchema = new Schema({
         required: false,
         default: ''
     },
+    company: {
+        type: String,
+        required: true,
+        max: 200
+    },
     country: {
         type: String, 
         default: 'Brasil'
